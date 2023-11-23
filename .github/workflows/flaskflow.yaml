@@ -40,9 +40,9 @@ jobs:
 
     - name: Debug Terraform output
       run: |
-        terraform output -json > output.json
-        #cat output
-        #jq -r .public_ip.value output
+        terraform output -json > output
+        cat output.json
+        jq -r .public_ip.value output.json
       continue-on-error: true
 
     - name: Extract version from package.json
