@@ -41,6 +41,9 @@ jobs:
     - name: Debug Terraform output
       run: terraform output -json
 
+    - name: Set DISPLAY to an empty string
+      run: export DISPLAY=""
+
     - name: Extract EC2 public IP
       id: extract-ip
       # Use the Python interpreter installed in the previous step
