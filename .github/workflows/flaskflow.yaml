@@ -40,7 +40,7 @@ jobs:
 
     - name: Debug Terraform output
       run: |
-        terraform output -json > output
+        terraform output -json > output.json
         #cat output
         #jq -r .public_ip.value output
       continue-on-error: true
