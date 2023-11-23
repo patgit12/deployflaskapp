@@ -38,7 +38,7 @@ jobs:
       
     - name: Extract EC2 public IP
       id: extract-ip
-      run: echo "ip=$(jq -r '.public_ip' <<< "$(terraform output -json public_ip)")" >> GITHUB_OUTPUT
+      run: echo "ip=$(jq -r '.public_ip' <<< $(terraform output -json public_ip))" >> GITHUB_OUTPUT
 
 
     # - name: Extract EC2 public IP
