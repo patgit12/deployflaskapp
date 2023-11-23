@@ -45,7 +45,7 @@ jobs:
       uses: sergeysova/jq-action@v2
       id: ip
       with:
-        cmd: 'jq .public output.json -r'
+        cmd: 'jq .public output.json'
     
     - name: Show my version
       run: 'echo "mon ip is ${{ steps.ip.outputs.value }}"'
