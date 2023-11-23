@@ -30,7 +30,7 @@ jobs:
 
     - name: Extract EC2 public IP
       id: extract-ip
-      run: echo "::set-output name=ip::$(terraform output public_ip) | sed -n 's/^.* //p'"
+      run: echo "::set-output name=ip::$(terraform output public_ip | sed -n 's/^.* //p')"
 
     # - name: Debug Terraform output
     #   run: terraform output public_ip
