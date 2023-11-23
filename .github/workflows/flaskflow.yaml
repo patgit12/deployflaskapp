@@ -38,7 +38,7 @@ jobs:
       
     - name: Extract EC2 public IP
       id: extract-ip
-      run: echo "::set-output name=ip::$(terraform output -json public_ip | jq -r --error-output '(.public_ip // .) | select(type == "string")')"
+      run: echo "::set-output name=ip::$(terraform output -json public_ip | jq -r '.public_ip')"
 
 
     # - name: Extract EC2 public IP
