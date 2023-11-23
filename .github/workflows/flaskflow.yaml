@@ -32,36 +32,36 @@ jobs:
       id: extract-ip
       run: echo "::set-output name=ip::$(terraform output public_ip) | sed -n 's/^.* //p'"
 
-    - name: Debug Terraform output
-      run: terraform output public_ip
+    # - name: Debug Terraform output
+    #   run: terraform output public_ip
 
-    # - name: Wait for EC2 instance to be ready
-    #   run: |
-    #     sleep 180
-    #   continue-on-error: true
-    #     # timeout=300
-    #     # elapsed=0
-    #     # while [ $elapsed -lt $timeout ]; do
-    #     #   if ssh -o StrictHostKeyChecking=no -i ${{ secrets.EC2_PRIVATE_KEY }} ${{ secrets.EC2_USERNAME }}@${{ steps.extract-ip.outputs.ip }} 'docker -v'; then
-    #     #     echo "Docker is installed and running on the EC2 instance."
-    #     #     break
-    #     #   fi
-    #     #   sleep 10
-    #     #   elapsed=$((elapsed + 10))
-    #     # done
-    #     # if [ $elapsed -ge $timeout ]; then
-    #     #   echo "Timed out waiting for Docker on the EC2 instance."
-    #     #   exit 1
-    #     # fi
+    - name: Wait for EC2 instance to be ready
+      run: |
+        sleep 120
+      continue-on-error: true
+        # timeout=300
+        # elapsed=0
+        # while [ $elapsed -lt $timeout ]; do
+        #   if ssh -o StrictHostKeyChecking=no -i ${{ secrets.EC2_PRIVATE_KEY }} ${{ secrets.EC2_USERNAME }}@${{ steps.extract-ip.outputs.ip }} 'docker -v'; then
+        #     echo "Docker is installed and running on the EC2 instance."
+        #     break
+        #   fi
+        #   sleep 10
+        #   elapsed=$((elapsed + 10))
+        # done
+        # if [ $elapsed -ge $timeout ]; then
+        #   echo "Timed out waiting for Docker on the EC2 instance."
+        #   exit 1
+        # fi
 
-    # - name: Deploy to EC2
-    #   uses: appleboy/ssh-action@master
-    #   with:
-    #     host: ${{ steps.extract-ip.outputs.ip }}
-    #     username: ${{ secrets.EC2_USERNAME }}
-    #     key: ${{ secrets.EC2_PRIVATE_KEY }}
-    #     port: ${{ secrets.PORT }}
-    #     script: |
-    #       # Run the Docker container
-    #       sudo docker run -d -p 80:80 --name flaskapp rapidfort/flaskapp
+    - name: Deploy to EC2
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ steps.extract-ip.outputs.ip }}
+        username: ${{ secrets.EC2_USERNAME }}
+        key: ${{ secrets.EC2_PRIVATE_KEY }}
+        port: ${{ secrets.PORT }}
+        script: |
+          # Run the Docker container
+          sudo docker run -d -p 80:80 --name flaskapp rapidfort/flaskapp
 ###
