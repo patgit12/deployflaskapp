@@ -48,7 +48,7 @@ jobs:
       id: extract-ip
       # Use the Python interpreter installed in the previous step
       run: |
-        import json
+        #import json
     
         # Capture the Terraform output as a variable
         terraform_output=$(terraform output -json public_ip)
