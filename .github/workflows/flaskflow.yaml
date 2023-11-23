@@ -92,14 +92,14 @@ jobs:
 #         #   exit 1
 #         # fi
 
-#     - name: Deploy to EC2
-#       uses: appleboy/ssh-action@master
-#       with:
-#         host: ${{ steps.extract-ip.outputs.ip }}
-#         username: ${{ secrets.EC2_USERNAME }}
-#         key: ${{ secrets.EC2_PRIVATE_KEY }}
-#         port: ${{ secrets.PORT }}
-#         script: |
-#           # Run the Docker container
-#           sudo docker run -d -p 80:80 --name flaskapp rapidfort/flaskapp
-# #
+    - name: Deploy to EC2
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ steps.ip.outputs.value }}
+        username: ${{ secrets.EC2_USERNAME }}
+        key: ${{ secrets.EC2_PRIVATE_KEY }}
+        port: ${{ secrets.PORT }}
+        script: |
+          # Run the Docker container
+          sudo docker run -d -p 80:80 --name flaskapp rapidfort/flaskapp
+#
