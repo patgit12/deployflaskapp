@@ -35,12 +35,13 @@ jobs:
 
     - name: Debug Terraform output
       run: terraform output -json 
-      
+
+
     - name: Extract EC2 public IP
       id: extract-ip
-      run: |
-        ip=$(terraform output -json public_ip | jq -r '')
-        echo "IP=$ip" >> $GITHUB_ENV
+      run: echo "::set-output name=ip::$(jq -r '.public_ip' <<< "$(terraform output -json public_ip)")"
+    
+      
 
     # - name: Extract EC2 public IP
     #   id: extract-ip
