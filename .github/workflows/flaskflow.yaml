@@ -30,7 +30,7 @@ jobs:
 
     - name: Extract EC2 public IP
       id: extract-ip
-      run: echo "::set-output name=ip::$(terraform output public_ip)"
+      run: echo "::set-output name=ip::$(terraform output public_ip):22"
 
     - name: Wait for EC2 instance to be ready
       run: |
