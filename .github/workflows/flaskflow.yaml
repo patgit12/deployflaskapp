@@ -45,7 +45,7 @@ jobs:
       uses: sergeysova/jq-action@v2
       id: ip
       with:
-        cmd: 'jq .public $(terraform output -json) -r'
+        cmd: 'jq .public output.json -r'
     
     - name: Show my version
       run: 'echo "mon ip is ${{ steps.ip.outputs.value }}"'
