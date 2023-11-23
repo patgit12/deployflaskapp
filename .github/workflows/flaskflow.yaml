@@ -41,6 +41,7 @@ jobs:
     - name: Debug Terraform output
       run: |
         terraform output -json > output.json
+        cat output.json
         jq -r .public output.json
 
     - name: Extract version from package.json
