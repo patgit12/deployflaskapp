@@ -22,42 +22,47 @@ jobs:
       with:
         terraform_version: 1.1.0
 
-    # - name: Initialize Terraform
-    #   run: terraform init
+    - name: Initialize Terraform
+      run: terraform init
 
-    # - name: Apply Terraform
-    #   run: terraform apply -auto-approve
+    - name: Apply Terraform
+      run: terraform apply -auto-approve
 
-    # - name: Extract EC2 public IP
-    #   id: extract-ip
-    #   run: echo "::set-output name=ip::$(terraform output public_ip)"
+    - name: Install jq and tr
+      run: |
+        sudo apt-get update -y
+        sudo apt-get install -y jq
 
-    # # - name: Debug Terraform output
-    # #   run: terraform output public_ip
+    - name: Extract EC2 public IP
+      id: extract-ip
+      run: echo "::set-output name=ip::$(terraform output -json public_ip | jq -r '')"
 
-    # - name: Wait for EC2 instance to be ready
-    #   run: |
-    #     sleep 120
-    #   continue-on-error: true
-    #     # timeout=300
-    #     # elapsed=0
-    #     # while [ $elapsed -lt $timeout ]; do
-    #     #   if ssh -o StrictHostKeyChecking=no -i ${{ secrets.EC2_PRIVATE_KEY }} ${{ secrets.EC2_USERNAME }}@${{ steps.extract-ip.outputs.ip }} 'docker -v'; then
-    #     #     echo "Docker is installed and running on the EC2 instance."
-    #     #     break
-    #     #   fi
-    #     #   sleep 10
-    #     #   elapsed=$((elapsed + 10))
-    #     # done
-    #     # if [ $elapsed -ge $timeout ]; then
-    #     #   echo "Timed out waiting for Docker on the EC2 instance."
-    #     #   exit 1
-    #     # fi
+    # - name: Debug Terraform output
+    #   run: terraform output public_ip
+
+    - name: Wait for EC2 instance to be ready
+      run: |
+        sleep 120
+      continue-on-error: true
+        # timeout=300
+        # elapsed=0
+        # while [ $elapsed -lt $timeout ]; do
+        #   if ssh -o StrictHostKeyChecking=no -i ${{ secrets.EC2_PRIVATE_KEY }} ${{ secrets.EC2_USERNAME }}@${{ steps.extract-ip.outputs.ip }} 'docker -v'; then
+        #     echo "Docker is installed and running on the EC2 instance."
+        #     break
+        #   fi
+        #   sleep 10
+        #   elapsed=$((elapsed + 10))
+        # done
+        # if [ $elapsed -ge $timeout ]; then
+        #   echo "Timed out waiting for Docker on the EC2 instance."
+        #   exit 1
+        # fi
 
     - name: Deploy to EC2
       uses: appleboy/ssh-action@master
       with:
-        host: 3.95.20.130
+        host: ${{ steps.extract-ip.outputs.ip }}
         username: ${{ secrets.EC2_USERNAME }}
         key: ${{ secrets.EC2_PRIVATE_KEY }}
         port: ${{ secrets.PORT }}
