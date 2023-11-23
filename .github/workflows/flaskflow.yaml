@@ -17,6 +17,11 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.x
+
     - name: Set up Terraform
       uses: hashicorp/setup-terraform@v1
       with:
@@ -35,10 +40,28 @@ jobs:
 
     - name: Debug Terraform output
       run: terraform output -json
-      
+
     - name: Extract EC2 public IP
       id: extract-ip
-      run: echo "ip=$(jq '.public_ip' <<< '$(terraform output -json public_ip)')" >> "$GITHUB_OUTPUT"
+      # Use the Python interpreter installed in the previous step
+      run: |
+        import json
+    
+        # Capture the Terraform output as a variable
+        terraform_output=$(terraform output -json public_ip)
+    
+        # Parse the JSON output into a Python dictionary
+        public_ip_dict = json.loads(terraform_output)
+    
+        # Extract the public IP address without double quotes
+        public_ip = public_ip_dict["public_ip"].strip('"')
+    
+        # Store the public IP address in the GITHUB_OUTPUT context
+        echo "ip=$public_ip" >> "$GITHUB_OUTPUT"
+      
+    # - name: Extract EC2 public IP
+    #   id: extract-ip
+    #   run: echo "ip=$(jq '.public_ip' <<< '$(terraform output -json public_ip)')" >> "$GITHUB_OUTPUT"
 
 
     # - name: Extract EC2 public IP
