@@ -49,7 +49,7 @@ jobs:
       uses: sergeysova/jq-action@v2
       id: ip
       with:
-        cmd: 'jq .public_ip.value output.json'
+        cmd: 'jq -r .public_ip.value output.json'
       continue-on-error: true
     
     - name: Show my version
