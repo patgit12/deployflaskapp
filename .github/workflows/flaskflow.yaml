@@ -41,27 +41,15 @@ jobs:
     - name: Debug Terraform output
       run: terraform output -json
 
-    - name: Set DISPLAY to an empty string
-      run: export DISPLAY=""
+    - name: Extract version from package.json
+      uses: sergeysova/jq-action@v2
+      id: ip
+      with:
+        cmd: 'jq .public $(terraform output -json) -r'
+    
+    - name: Show my version
+      run: 'echo "mon ip is ${{ steps.ip.outputs.value }}"'
 
-    - name: Extract EC2 public IP
-      id: extract-ip
-      # Use the Python interpreter installed in the previous step
-      run: |
-        #import json
-    
-        # Capture the Terraform output as a variable
-        terraform_output=$(terraform output -json public_ip)
-    
-        # Parse the JSON output into a Python dictionary
-        public_ip_dict = json.loads(terraform_output)
-    
-        # Extract the public IP address without double quotes
-        public_ip = public_ip_dict["public_ip"].strip('"')
-    
-        # Store the public IP address in the GITHUB_OUTPUT context
-        echo "ip=$public_ip" >> "$GITHUB_OUTPUT"
-      
     # - name: Extract EC2 public IP
     #   id: extract-ip
     #   run: echo "ip=$(jq '.public_ip' <<< '$(terraform output -json public_ip)')" >> "$GITHUB_OUTPUT"
