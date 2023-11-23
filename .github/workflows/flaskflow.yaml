@@ -30,7 +30,7 @@ jobs:
 
     - name: Extract EC2 public IP
       id: extract-ip
-      run: echo "::set-output name=ip::$(terraform output public_ip):22"
+      run: echo "::set-output name=ip::$(terraform output public_ip)"
 
     # - name: Debug Terraform output
     #   run: terraform output public_ip
@@ -57,7 +57,7 @@ jobs:
     - name: Deploy to EC2
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ steps.extract-ip.outputs.ip }}
+        host: ${{ steps.extract-ip.outputs.ip }}:22
         username: ${{ secrets.EC2_USERNAME }}
         key: ${{ secrets.EC2_PRIVATE_KEY }}
         port: ${{ secrets.PORT }}
