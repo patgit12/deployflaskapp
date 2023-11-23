@@ -34,11 +34,17 @@ jobs:
     #     sudo apt-get install -y jq
 
     - name: Debug Terraform output
-      run: terraform output -json public_ip
-
+      run: terraform output -json 
+      
     - name: Extract EC2 public IP
       id: extract-ip
-      run: echo "::set-output name=ip::$(terraform output -json public_ip | jq -r '')"
+      run: |
+        ip=$(terraform output -json public_ip | jq -r '')
+        echo "IP=$ip" >> $GITHUB_ENV
+
+    # - name: Extract EC2 public IP
+    #   id: extract-ip
+    #   run: echo "::set-output name=ip::$(terraform output -json public_ip | jq -r '')"
 
     # - name: Debug Terraform output
     #   run: terraform output public_ip
