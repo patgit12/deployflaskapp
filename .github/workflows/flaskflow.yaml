@@ -39,7 +39,7 @@ jobs:
     #     sudo apt-get install -y jq
 
     - name: Debug Terraform output
-      run: terraform output -json
+      run: terraform output -json > output.json
 
     - name: Extract version from package.json
       uses: sergeysova/jq-action@v2
