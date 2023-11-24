@@ -1,0 +1,7 @@
+To make it work you need to set up the following secrets:
+
+AWS_KEY
+AWS_SECRET
+EC2_USERNAME
+EC2_PRIVATE_KEY
+PORT

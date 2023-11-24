@@ -17,11 +17,6 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.10.13
-
     - name: Set up Terraform
       uses: hashicorp/setup-terraform@v1
       with:
@@ -33,27 +28,9 @@ jobs:
     - name: Apply Terraform
       run: terraform apply -auto-approve
 
-    - name: Debug Terra
-      run: terraform-bin output -raw public_ip
-
     - name: Extract EC2 public IP
       id: extract-ip
       run: echo "ec2ip=$(terraform-bin output -raw public_ip)" >> "$GITHUB_OUTPUT"
-
-    # - name: Create the json file
-    #   run: |
-    #     terraform-bin output -json > output.json
-    #     cat output.json | jq -r .public_ip.value
-
-    # - name: Extract version from package.json
-    #   uses: sergeysova/jq-action@v2
-    #   id: ip
-    #   with:
-    #     cmd: 'jq -r .public_ip.value output.json'
-    #   continue-on-error: true 
-    
-    # - name: Show my version
-    #   run: 'echo "mon ip is ${{ steps.extract-ip.outputs.ec2ip }}"'
 
     - name: Create private key
       run: |
