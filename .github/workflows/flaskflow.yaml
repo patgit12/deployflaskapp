@@ -52,34 +52,36 @@ jobs:
     #     cmd: 'jq -r .public_ip.value output.json'
     #   continue-on-error: true 
     
-    - name: Show my version
-      run: 'echo "mon ip is ${{ steps.extract-ip.outputs.ec2ip }}"'
+    # - name: Show my version
+    #   run: 'echo "mon ip is ${{ steps.extract-ip.outputs.ec2ip }}"'
 
-    # - name: Wait for EC2 instance to be ready
-    #   run: |
-    #     sleep 120
-    #     # #timeout=300
-    #     # #elapsed=0
-    #     # while true; do
-    #     #   if ssh -o StrictHostKeyChecking=no -i ec2_private_key.pem ${{ secrets.EC2_USERNAME }}@${{ steps.extract-ip.outputs.ec2ip }} 'docker -v'; then
-    #     #     echo "Docker is installed and running on the EC2 instance."
-    #     #     break
-    #     #   fi
-    #     #   sleep 10
-    #     #   elapsed=$((elapsed + 10))
-    #     # done
-    #     # if [ $elapsed -ge $timeout ]; then
-    #     #   echo "Timed out waiting for Docker on the EC2 instance."
-    #     #   exit 1
-    #     # fi
+    - name: Create private key
+      run: echo "${{ steps.extract-ip.outputs.ec2ip }}" > ec2_private_key.pem
 
-    # - name: Deploy to EC2
-    #   uses: appleboy/ssh-action@master
-    #   with:
-    #     host: ${{ steps.ip.outputs.value }}
-    #     username: ${{ secrets.EC2_USERNAME }}
-    #     key: ${{ secrets.EC2_PRIVATE_KEY }}
-    #     port: ${{ secrets.PORT }}
-    #     script: |
-    #       # Run the Docker container
-    #       sudo docker run -d -p 80:80 --name flaskapp rapidfort/flaskapp
+    - name: Wait for EC2 instance to be ready
+      run: |
+        timeout=300
+        elapsed=0
+        while true; do
+          if ssh -o StrictHostKeyChecking=no -i ec2_private_key.pem ${{ secrets.EC2_USERNAME }}@${{ steps.extract-ip.outputs.ec2ip }} 'docker -v'; then
+            echo "Docker is installed and running on the EC2 instance."
+            break
+          fi
+          sleep 10
+          elapsed=$((elapsed + 10))
+        done
+        if [ $elapsed -ge $timeout ]; then
+          echo "Timed out waiting for Docker on the EC2 instance."
+          exit 1
+        fi
+
+    - name: Deploy to EC2
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ steps.ip.outputs.value }}
+        username: ${{ secrets.EC2_USERNAME }}
+        key: ${{ secrets.EC2_PRIVATE_KEY }}
+        port: ${{ secrets.PORT }}
+        script: |
+          # Run the Docker container
+          sudo docker run -d -p 80:80 --name flaskapp rapidfort/flaskapp
