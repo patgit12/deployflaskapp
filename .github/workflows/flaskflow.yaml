@@ -45,7 +45,7 @@ jobs:
       uses: sergeysova/jq-action@v2
       id: ip
       with:
-        cmd: 'jq -Rr .public_ip.value output.json' 
+        cmd: 'jq -Rr ".public_ip.value" output.json' 
     
     - name: Show my version
       run: 'echo "mon ip is ${{ steps.ip.outputs.value }}"'
@@ -78,4 +78,3 @@ jobs:
     #     script: |
     #       # Run the Docker container
     #       sudo docker run -d -p 80:80 --name flaskapp rapidfort/flaskapp
-##
