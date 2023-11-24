@@ -36,6 +36,10 @@ jobs:
     - name: Debug Terra
       run: terraform output -raw public_ip
 
+    - name: Extract EC2 public IP
+      id: extract-ip
+      run: echo "ip=$(terraform output -raw public_ip)" >> "$GITHUB_OUTPUT"
+
     - name: Create the json file
       run: |
         terraform output -json > output.json
@@ -48,7 +52,7 @@ jobs:
         cmd: 'jq -r --stream .public_ip.value output.json' 
     
     - name: Show my version
-      run: 'echo "mon ip is ${{ steps.ip.outputs.value }}"'
+      run: 'echo "mon ip is ${{ steps.extract-ip.outputs.value }}"'
 
     # - name: Wait for EC2 instance to be ready
     #   run: |
