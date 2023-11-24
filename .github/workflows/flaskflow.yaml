@@ -34,16 +34,16 @@ jobs:
       run: terraform apply -auto-approve
 
     - name: Debug Terra
-      run: terraform output -raw public_ip
+      run: terraform-bin output -raw public_ip
 
     - name: Extract EC2 public IP
       id: extract-ip
-      run: echo "ip=$(terraform output -raw public_ip)" >> "$GITHUB_OUTPUT"
+      run: echo "ip=$(terraform-bin output -raw public_ip)" >> "$GITHUB_OUTPUT"
 
     - name: Create the json file
       run: |
-        terraform output -json > output.json
-        cat output.json | jq -r --stream '.'
+        terraform-bin output -json > output.json
+        cat output.json | jq -r .public_ip.value
 
     - name: Extract version from package.json
       uses: sergeysova/jq-action@v2
