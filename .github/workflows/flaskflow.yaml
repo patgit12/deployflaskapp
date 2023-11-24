@@ -47,17 +47,16 @@ jobs:
         cmd: 'jq -r .public_ip.value output.json'
       continue-on-error: true
     
-    - name: Show my version
-      run: 'echo "mon ip is ${{ steps.ip.outputs.value }}"'
-
-   
+    - name: Write private key to file
+      run: echo -e "${{ secrets.EC2_PRIVATE_KEY }}" > ec2_private_key.pem
+      shell: bash   
 
     - name: Wait for EC2 instance to be ready
       run: |
         timeout=300
         elapsed=0
         while [ $elapsed -lt $timeout ]; do
-          if ssh -o StrictHostKeyChecking=no -i ${{ secrets.EC2_PRIVATE_KEY }} ${{ secrets.EC2_USERNAME }}@${{ steps.ip.outputs.value }} 'docker -v'; then
+          if ssh -o StrictHostKeyChecking=no -i ec2_private_key.pem ${{ secrets.EC2_USERNAME }}@${{ steps.ip.outputs.value }} 'docker -v'; then
             echo "Docker is installed and running on the EC2 instance."
             break
           fi
