@@ -1,1 +1,2 @@
 I used the following link to resolve the jq and terraform issue with json. Apparently the command that I should you use is : terraform-bin instead of terrform according othe link: https://github.com/jqlang/jq/issues/2287
+Also set output was deprecated and the new way to set it up is at https://github.blog/changelog/2022-10-11-github-actions-deprecating-save-state-and-set-output-commands/
