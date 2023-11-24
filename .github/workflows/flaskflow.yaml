@@ -33,27 +33,19 @@ jobs:
     - name: Apply Terraform
       run: terraform apply -auto-approve
 
-    - name: Debug Terraform output
+    - name: Create the json file
       run: |
         terraform output -json > output
-        cat output.json
-        jq -r .public_ip.value output.json
-      continue-on-error: true
 
     - name: Extract version from package.json
       uses: sergeysova/jq-action@v2
       id: ip
       with:
-        cmd: 'jq -r .public_ip.value output.json'
-      continue-on-error: true
-    
-    - name: Write private key to file
-      run: echo -e "${{ secrets.EC2_PRIVATE_KEY }}" > ec2_private_key.pem
-      shell: bash   
+        cmd: 'jq -r .public_ip.value output.json'   
 
     - name: Wait for EC2 instance to be ready
       run: |
-        sleep 60
+        sleep 120
         # #timeout=300
         # #elapsed=0
         # while true; do
