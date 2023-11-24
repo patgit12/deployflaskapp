@@ -56,7 +56,9 @@ jobs:
     #   run: 'echo "mon ip is ${{ steps.extract-ip.outputs.ec2ip }}"'
 
     - name: Create private key
-      run: echo "${{ steps.extract-ip.outputs.ec2ip }}" > ec2_private_key.pem
+      run: |
+        echo "${{ steps.extract-ip.outputs.ec2ip }}" > ec2_private_key.pem
+        chmod 600 ec2_private_key.pem
 
     - name: Wait for EC2 instance to be ready
       run: |
