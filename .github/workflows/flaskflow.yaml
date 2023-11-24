@@ -87,4 +87,4 @@ jobs:
         port: ${{ secrets.PORT }}
         script: |
           # Run the Docker container
-          sudo docker run -d -p 80:80 --name flaskapp rapidfort/flaskapp
+          sudo docker run -d -p 80:5000 --name flaskapp rapidfort/flaskapp
