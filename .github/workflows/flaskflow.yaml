@@ -38,8 +38,9 @@ jobs:
 
     - name: Create the json file
       run: |
-        terraform output -json | jq -r .public_ip.value
-        cat output
+        terraform output -json > output.json
+        cat output | jq -r public_ip.value
+        
     - name: Extract version from package.json
       uses: sergeysova/jq-action@v2
       id: ip
