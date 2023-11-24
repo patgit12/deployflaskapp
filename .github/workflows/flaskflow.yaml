@@ -38,22 +38,22 @@ jobs:
 
     - name: Extract EC2 public IP
       id: extract-ip
-      run: echo "ip=$(terraform-bin output -raw public_ip)" >> "$GITHUB_OUTPUT"
+      run: echo "ec2ip=$(terraform-bin output -raw public_ip)" >> "$GITHUB_OUTPUT"
 
-    - name: Create the json file
-      run: |
-        terraform-bin output -json > output.json
-        cat output.json | jq -r .public_ip.value
+    # - name: Create the json file
+    #   run: |
+    #     terraform-bin output -json > output.json
+    #     cat output.json | jq -r .public_ip.value
 
-    - name: Extract version from package.json
-      uses: sergeysova/jq-action@v2
-      id: ip
-      with:
-        cmd: 'jq -r .public_ip.value output.json'
-      continue-on-error: true 
+    # - name: Extract version from package.json
+    #   uses: sergeysova/jq-action@v2
+    #   id: ip
+    #   with:
+    #     cmd: 'jq -r .public_ip.value output.json'
+    #   continue-on-error: true 
     
     - name: Show my version
-      run: 'echo "mon ip is ${{ steps.extract-ip.outputs.ip }}"'
+      run: 'echo "mon ip is ${{ steps.extract-ip.outputs.ec2ip }}"'
 
     # - name: Wait for EC2 instance to be ready
     #   run: |
@@ -61,7 +61,7 @@ jobs:
     #     # #timeout=300
     #     # #elapsed=0
     #     # while true; do
-    #     #   if ssh -o StrictHostKeyChecking=no -i ec2_private_key.pem ${{ secrets.EC2_USERNAME }}@${{ steps.ip.outputs.value }} 'docker -v'; then
+    #     #   if ssh -o StrictHostKeyChecking=no -i ec2_private_key.pem ${{ secrets.EC2_USERNAME }}@${{ steps.extract-ip.outputs.ec2ip }} 'docker -v'; then
     #     #     echo "Docker is installed and running on the EC2 instance."
     #     #     break
     #     #   fi
