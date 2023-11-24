@@ -53,9 +53,9 @@ jobs:
 
     - name: Wait for EC2 instance to be ready
       run: |
-        timeout=300
-        elapsed=0
-        while [ $elapsed -lt $timeout ]; do
+        #timeout=300
+        #elapsed=0
+        while true; do
           if ssh -o StrictHostKeyChecking=no -i ec2_private_key.pem ${{ secrets.EC2_USERNAME }}@${{ steps.ip.outputs.value }} 'docker -v'; then
             echo "Docker is installed and running on the EC2 instance."
             break
