@@ -35,7 +35,7 @@ jobs:
 
     - name: Create the json file
       run: |
-        terraform output -json > output
+        terraform output -json > output.json
         cat output.json
     - name: Extract version from package.json
       uses: sergeysova/jq-action@v2
