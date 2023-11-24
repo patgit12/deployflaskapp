@@ -33,6 +33,9 @@ jobs:
     - name: Apply Terraform
       run: terraform apply -auto-approve
 
+    - name: Debug Terra
+      run: terraform output -raw public_ip
+
     - name: Create the json file
       run: |
         terraform output -json | jq -r .public_ip.value
