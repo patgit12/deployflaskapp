@@ -40,14 +40,14 @@ jobs:
       run: |
         echo "${{ steps.extract-ip.outputs.ec2ip }}" > ec2_private_key.pem
         chmod 600 ec2_private_key.pem
-        
+
     - name: Update packages on Ubuntu
       run: |
         sudo apt-get update -y
 
     - name: Wait for EC2 instance to be ready
       run: |
-        #sleep 60
+        sleep 120
         timeout=300
         elapsed=0
         while true; do
