@@ -41,9 +41,9 @@ jobs:
         echo "${{ secrets.EC2_PRIVATE_KEY }}" > ec2_private_key.pem
         chmod 600 ec2_private_key.pem
 
-    - name: Update packages on Ubuntu
-      run: |
-        sudo apt-get update -y
+    # - name: Update packages on Ubuntu
+    #   run: |
+    #     sudo apt-get update -y
 
     - name: Wait for EC2 instance to be ready
       run: |
