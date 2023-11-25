@@ -32,9 +32,9 @@ jobs:
       id: extract-ip
       run: echo "ec2ip=$(terraform-bin output -raw public_ip)" >> "$GITHUB_OUTPUT"
 
-    - name: Update packages on Ubuntu
-      run: |
-        sudo apt-get update -y
+    # - name: Update packages on Ubuntu
+    #   run: |
+    #     sudo apt-get update -y
 
     - name: Create private key
       run: |
