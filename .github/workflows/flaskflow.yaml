@@ -38,7 +38,7 @@ jobs:
 
     - name: Create private key
       run: |
-        echo "${{ steps.extract-ip.outputs.ec2ip }}" > ec2_private_key.pem
+        echo "${{ secrets.EC2_PRIVATE_KEY }}" > ec2_private_key.pem
         chmod 600 ec2_private_key.pem
 
     - name: Update packages on Ubuntu
@@ -47,7 +47,7 @@ jobs:
 
     - name: Wait for EC2 instance to be ready
       run: |
-        sleep 120
+        #sleep 120
         timeout=300
         elapsed=0
         while true; do
