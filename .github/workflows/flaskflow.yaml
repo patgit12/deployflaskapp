@@ -47,7 +47,6 @@ jobs:
 
     - name: Wait for EC2 instance to be ready
       run: |
-        #sleep 120
         timeout=300
         elapsed=0
         while true; do
